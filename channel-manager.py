@@ -3,8 +3,10 @@ from googleapiclient.errors import HttpError
 import json
 import logging
 
-# Configure logging
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+def configure_logging():
+  """Configures logging for the script."""
+  logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+  logging.getLogger('googleapicliet.discovery_cache').setLevel(logging.ERROR)   
 
 def get_youtube_subscriptions(api_service_name, api_version, credentials):
   """Retrieves a list of the authenticated user's subscriptions.
@@ -46,6 +48,24 @@ def save_subscriptions_to_json(subscriptions_data, filename="subscriptions.json"
   """
   with open(filename, 'w') as f:
     json.dump(subscriptions_data, f, indent=2)
+
+def load_data_from_json(filename):
+  """Loads data from a JSON file.
+
+  This function loads data from a JSON file.
+
+  Args:
+    filename: The path to the JSON file.
+
+  Returns:
+    The loaded data on success, None on error.
+  """
+  try:
+    with open(filename, 'r') as f:
+      return json.load(f)
+  except (FileNotFoundError, json.JSONDecodeError) as e:
+    logging.error(f"Error loading JSON file: {e}")
+    return None
 
 def extract_channel_ids(json_file):
   """Extracts channel IDs from a JSON file containing subscription data.
@@ -96,6 +116,55 @@ def load_config(filename="config.json"):
     logging.error(f"Error loading configuration: {e}")
     return None
 
-config = load_config
+def main():
+  """Main function for the script."""
+  configure_logging()
+  config = load_config()
 
-#Update later
+  if not config:
+    logging.error("Failed to load config. Exiting.")
+    return
+
+  credentials = config.get("credentials")  # Replace with actual key
+  if not credentials:
+    logging.error("Missing credentials in config. Exiting.")
+    return
+
+  subscriptions = get_youtube_subscriptions("youtube", "v3", credentials)
+
+  if subscriptions:
+    logging.info("Successfully retrieved subscriptions.")
+    # Decide on processing the subscriptions data (subscriptions) 
+    # Option 1: Save to JSON
+    # save_data_to_json(subscriptions, "subscriptions.json")
+  else:
+    logging.error("Failed to retrieve subscriptions.")
+
+if __name__ == "__main__":
+  main()
+  """Main function for the script."""
+  configure_logging()
+  config = load_config()
+
+  if not config:
+    logging.error("Failed to load config. Exiting.")
+    return
+
+  # Access credentials or other data from config
+  credentials = config.get("credentials")  # Replace with actual key
+
+  if not credentials:
+    logging.error("Missing credentials in config. Exiting.")
+    return
+
+  subscriptions = get_youtube_subscriptions("youtube", "v3", credentials)
+
+  if subscriptions:
+    logging.info("Successfully retrieved subscriptions.")
+    # Process subscription data (subscriptions dictionary)
+  else:
+    logging.error("Failed to retrieve subscriptions.")
+
+
+if __name__ == "__main__":
+  main()
