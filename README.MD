@@ -1,23 +1,34 @@
-# YouTube Utilities
+# YouTube-Utils
+This repository provides a collection of Python scripts and utilities for interacting with YouTube and managing your YouTube data.
 
-This Python script collection provides tools for managing YouTube subscriptions.
+## Features:
 
-## Current functionalities:
+(List specific features based on the code's functionality. Examples could be:)
+Download YouTube videos
+Extract video metadata (title, description, thumbnails, etc.)
+Analyze channel statistics
+Manage subscriptions (potentially)
+Create custom YouTube data processing tools (if applicable)
+Installation:
 
-Export Subscriptions (subscriptions.py): Exports your YouTube subscriptions to a JSON file.
-Extract Channel IDs (extract_channel_ids.py): (Optional) Extracts channel IDs from a JSON file containing subscription data (useful for further processing or manual subscription).
+## Prerequisites:
+Python 3 (version X.X or later recommended)
+Additional dependencies (list any required libraries like requests or youtube-dl)
+(Optional) Setup for Google API access (if the code interacts with YouTube's private data)
+Clone the repository:
+Bash
+git clone https://github.com/OddRefrigerator/YouTube-Utils
+Use code with caution.
 
-## Important Notes:
+## Install dependencies:
+Bash
+pip install -r requirements.txt  # Replace with the actual install command if different
+Use code with caution.
 
-Directly importing subscriptions to another YouTube account using the YouTube Data API v3 is currently not supported due to security limitations.
-This repository provides functionalities for exporting subscriptions and (optionally) extracting channel IDs. Manual subscription or exploration of alternative methods might be required for import.
+## Usage:
 
-## Getting Started:
-
-Install required libraries (googleapiclient).
-Replace the placeholder for your OAuth 2.0 credentials in the scripts.
-Run subscriptions.py to export your subscriptions.
+Each script within the repository likely has its own specific usage instructions. Refer to the individual script files for detailed information on how to use them. Some scripts might require configuration files or command-line arguments.
 
 ## Disclaimer:
 
-Third-party tools or manual subscription might be required for import functionalities. Use such methods with caution and at your own risk.
+This project is intended for educational and personal use. Please be respectful of YouTube's Terms of Service when using these tools.

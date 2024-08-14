@@ -97,3 +97,5 @@ def load_config(filename="config.json"):
     return None
 
 config = load_config
+
+#Update later
