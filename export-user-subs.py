@@ -1,12 +1,18 @@
+import json
+import logging
 import googleapiclient.discovery
 from googleapiclient.errors import HttpError
-import json
 
-def get_youtube_subscriptions(api_service_name, api_version, credentials):
+def load_config(filename="config.json"):
+  """Loads configuration from a JSON file."""
+  with open(filename, 'r') as f:
+    return json.load(f)
+
+def get_youtube_subscriptions(api_key):
   """Retrieves a list of the authenticated user's subscriptions."""
   try:
     youtube = googleapiclient.discovery.build(
-        api_service_name, api_version, credentials=credentials)
+        "youtube", "v3", developerKey=api_key)
 
     request = youtube.subscriptions().list(
         mine=True,
@@ -16,20 +22,39 @@ def get_youtube_subscriptions(api_service_name, api_version, credentials):
 
     return response
   except HttpError as e:
-    print(f"An error occurred: {e}")
+    # Check for specific error codes and provide more informative messages
+    if e.resp.status in [401, 403]:
+      logging.error(f"Authentication Error: {e}")
+    elif e.resp.status == 403:
+      logging.error(f"Quota Limit Reached: {e}")
+    else:
+      logging.error(f"An error occurred: {e}")
     return None
 
 def save_subscriptions_to_json(subscriptions_data, filename="subscriptions.json"):
-  """Saves the subscriptions data to a JSON file."""
+  """Saves the YouTube channel subscription data to a JSON file.
+
+  Args:
+      subscriptions_data: A dictionary containing the YouTube subscription data.
+      filename (str, optional): The filename to save the JSON data to. 
+          Defaults to "subscriptions.json".
+  """
   with open(filename, 'w') as f:
     json.dump(subscriptions_data, f, indent=2)
 
-# Replace with your API credentials and setup
-api_service_name = "youtube"
-api_version = "v3"
-credentials = # Your OAuth 2.0 credentials
+if __name__ == "__main__":
+  # Configure logging
+  logging.basicConfig(level=logging.INFO)
 
-subscriptions_data = get_youtube_subscriptions(api_service_name, api_version, credentials)
-if subscriptions_data:
-  save_subscriptions_to_json(subscriptions_data)
-  print("Subscriptions exported to subscriptions.json")
+  # Load API key from config file
+  config = load_config()
+  api_key = config.get("api_key")
+
+  if not api_key:
+    logging.error("API key not found in config.json")
+    exit(1)
+
+  subscriptions_data = get_youtube_subscriptions(api_key)
+  if subscriptions_data:
+    save_subscriptions_to_json(subscriptions_data)
+    logging.info("Subscriptions exported to subscriptions.json")
