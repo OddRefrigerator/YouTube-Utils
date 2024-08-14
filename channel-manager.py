@@ -73,29 +73,27 @@ def extract_channel_ids(json_file):
         logging.warning(f"Skipping item: Channel ID missing")
 
     return channel_ids
-  except FileNotFoundError:
-    logging.error(f"JSON file not found: {json_file}")
+  except (FileNotFoundError, json.JSONDecodeError) as e:
+    logging.error(f"Error loading JSON file: {e}")
     return []
 
-# Replace with your API credentials and setup
-api_service_name = "youtube"
-api_version = "v3"
-credentials = # Your OAuth 2.0 credentials
+def load_config(filename="config.json"):
+  """Loads configuration from a JSON file.
 
-# Get subscriptions and handle errors
-subscriptions_data = get_youtube_subscriptions(api_service_name, api_version, credentials)
-if not subscriptions_data:
-  exit()
+  This function attempts to read the specified JSON file and returns a dictionary
+  containing the configuration options.
 
-# Save subscriptions to JSON
-save_subscriptions_to_json(subscriptions_data)
-logging.info("Subscriptions exported to subscriptions.json")
+  Args:
+    filename: The path to the JSON file containing configuration options.
 
-# Extract channel IDs from the saved JSON
-json_file = 'subscriptions.json'
-channel_ids = extract_channel_ids(json_file)
+  Returns:
+    A dictionary containing the loaded configuration on success, or None on error.
+  """
+  try:
+    with open(filename, 'r') as f:
+      return json.load(f)
+  except (FileNotFoundError, json.JSONDecodeError, PermissionError) as e:
+    logging.error(f"Error loading configuration: {e}")
+    return None
 
-# Print extracted channel IDs with error handling
-logging.info("Extracted channel IDs:")
-for channel_id in channel_ids:
-  print(channel_id)
+config = load_config
