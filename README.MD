@@ -1,34 +1,31 @@
-# YouTube-Utils
-This repository provides a collection of Python scripts and utilities for interacting with YouTube and managing your YouTube data.
+# Python Script for Retrieving YouTube Subscriptions
+This Python script retrieves a list of the authenticated user's YouTube subscriptions and optionally saves them to a JSON file.
 
 ## Features:
 
-(List specific features based on the code's functionality. Examples could be:)
-Download YouTube videos
-Extract video metadata (title, description, thumbnails, etc.)
-Analyze channel statistics
-Manage subscriptions (potentially)
-Create custom YouTube data processing tools (if applicable)
-Installation:
+Connects to the YouTube Data API v3.
+Retrieves a list of the user's subscriptions with basic information (channel ID and title).
+Handles potential errors during the API call.
+Provides functions to save retrieved subscriptions to a JSON file and extract channel IDs from a saved JSON file.
+Configurable via a JSON file (credentials and other options).
 
-## Prerequisites:
-Python 3 (version X.X or later recommended)
-Additional dependencies (list any required libraries like requests or youtube-dl)
-(Optional) Setup for Google API access (if the code interacts with YouTube's private data)
-Clone the repository:
-Bash
-git clone https://github.com/OddRefrigerator/YouTube-Utils
-Use code with caution.
+## Requirements:
 
-## Install dependencies:
-Bash
-pip install -r requirements.txt  # Replace with the actual install command if different
-Use code with caution.
+Python 3
+Google API Client libraries (google-api-python-client)
 
 ## Usage:
 
-Each script within the repository likely has its own specific usage instructions. Refer to the individual script files for detailed information on how to use them. Some scripts might require configuration files or command-line arguments.
+Install the required libraries: pip install google-api-python-client
+Configure a JSON file named config.json with your OAuth 2.0 credentials (refer to Google API documentation for details).
+Run the script: python channel-manager.py
 
-## Disclaimer:
+## Optional:
 
-This project is intended for educational and personal use. Please be respectful of YouTube's Terms of Service when using these tools.
+Modify the main function to process the retrieved subscriptions data (dictionary format).
+
+## Note:
+
+Replace the placeholder for accessing credentials from the config file with the actual key in your implementation.
+
+This script provides a basic framework for managing YouTube subscriptions programmatically. You can extend it further to perform additional tasks based on your needs.
